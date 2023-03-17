@@ -1,0 +1,13 @@
+.responsive{
+    width: 100%;
+    height: auto;
+}
+
+.cell {
+    border: solid;
+    float: left;
+    height: 45px;
+    width: 45px;
+    border: 1px solid #fff;
+    
+}

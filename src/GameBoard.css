@@ -2,4 +2,9 @@
     position: relative;
     background-color:beige;
     border: solid;
+    text-align: center;
+}
+
+.clear {
+  clear: both;
 }

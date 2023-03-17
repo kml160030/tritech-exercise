@@ -1,10 +1,10 @@
 import React from "react";
 import closed from "./assets/closed.png";
+import './Cell.css';
 
-class Cell extends React.Component {
+export default class Cell extends React.Component {
     getCellStatus(){
         let {value} = this.props;
-        
         if(value == "closed"){
             return "src/assets/closed.png";
         }
@@ -19,8 +19,11 @@ class Cell extends React.Component {
         //         {this.getCellStatus}
         //     </div>
         // )
-        return(<img src={closed}/>)
+        const value = this.props;
+        return(
+            <div className="cell">
+                <img class="responsive" src={closed}/>
+            </div>
+        );
     }
 }
-
-export default Cell;
