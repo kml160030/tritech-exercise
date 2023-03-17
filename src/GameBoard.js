@@ -18,7 +18,8 @@ export default class GameBoard extends React.Component {
                     x: n,
                     y: m,
                     isMine: false,
-                    isFlagged: false
+                    isFlagged: false,
+                    isRevealed: false,
                 };
             }
         }
@@ -29,14 +30,24 @@ export default class GameBoard extends React.Component {
         return board.map( row => {
             return row.map(cell => {
                 return(
-                    <div key = {board.x * board.length + board.y}> 
-                        <Cell value = {"closed"} /> 
+                    <div key = {cell.x * row.length + cell.y}> 
+                        <Cell value = {cell} onClick={() => this.click(cell.x, cell.y)} /> 
                         {/* in the future above line will use cell for value */}
                         {(row[row.length - 1] === cell) ? (<div className="clear" />) : ""}
                     </div>
                 );
             });
         });
+    }
+
+    click(x, y){
+        // only allow action if unknown tile
+        console.log(this.state.board[x][y]);
+        if(!this.state.board[x][y].isRevealed){
+            this.state.board[x][y].isRevealed = true;
+
+            this.setState({board: this.state.board});
+        }
     }
 
     render(){
