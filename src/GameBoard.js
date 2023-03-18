@@ -6,9 +6,17 @@ export default class GameBoard extends React.Component {
 
     state = {
         mines: 10,
-        board: this.createEmptyBoard(),
+        board: this.initializeBoard(10), // hard coded for 10 mines currently
     };
     
+    initializeBoard(mines){
+        let board = [];
+        board = this.createEmptyBoard();
+        board = this.placeMines(board, mines);
+
+        return board;
+    }
+
     createEmptyBoard(){
         let board = [];
         for(let n = 0; n < 10; n++){
@@ -24,6 +32,31 @@ export default class GameBoard extends React.Component {
             }
         }
         return board;
+    }
+
+    placeMines(board, mines){
+        // console.log();
+        let plantedMines = 0;
+        while(plantedMines < mines){
+            plantedMines++;
+            let firstDigit = this.getRandomNum();
+            let secondDigit = this.getRandomNum();
+            
+            // console.log("first digit " + firstDigit);
+            // console.log("second digit " + secondDigit);
+            board[firstDigit][secondDigit].isMine = true;
+            // console.log("thing ", board[firstDigit][secondDigit]);
+        }
+
+        return board;
+    }
+
+    getRandomNum(){
+        let min = Math.ceil(0);
+        let max = Math.floor(9);
+        
+        // let returnValue = Math.floor(Math.random() * (max - min + 1) + min);
+        return Math.floor(Math.random() * (max - min + 1) + min);
     }
 
     renderBoard(board){
@@ -42,12 +75,20 @@ export default class GameBoard extends React.Component {
 
     click(x, y){
         // only allow action if unknown tile
-        console.log(this.state.board[x][y]);
+        // console.log(this.state.board[x][y]);
+
+        if(this.state.board[x][y].isMine){
+            // this.state.board.isRevealed = true;
+            this.setState({board: this.state.board});
+        }
+
         if(!this.state.board[x][y].isRevealed){
             this.state.board[x][y].isRevealed = true;
 
+            // console.log("cell", this.state.board[x][y]);
             this.setState({board: this.state.board});
         }
+
     }
 
     render(){
