@@ -2,6 +2,7 @@ import React from "react";
 import closed from "./assets/closed.png";
 import open from "./assets/open.png";
 import bomb from "./assets/exploded_bomb.png";
+import flag from "./assets/flagged_bomb.png";
 import './Cell.css';
 
 export default class Cell extends React.Component {
@@ -9,14 +10,15 @@ export default class Cell extends React.Component {
         let {value} = this.props;
         
         if(!value.isRevealed){
-            return closed;
+            return value.isFlagged ? flag : closed;
         }
-        if(value.isMine){
+        else if(value.isMine){
             return bomb;
         }
-        if(value.isRevealed){
+        else if(value.isRevealed){
             return open;
         }
+
 
         // default value
         return null;
@@ -24,8 +26,13 @@ export default class Cell extends React.Component {
 
     render(){
         // const value = this.props;
+        // console.log("props", this.props.value);
         return(
-            <div className="cell" onClick={this.props.onClick}>
+            <div 
+            className="cell" 
+            onClick={this.props.onClick} 
+            onContextMenu={this.props.onContextMenu}
+            >
                 <img className="responsive" src={this.getCellStatus()}/>
             </div>
         );
