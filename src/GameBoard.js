@@ -13,6 +13,7 @@ export default class GameBoard extends React.Component {
         let board = [];
         board = this.createEmptyBoard();
         board = this.placeMines(board, mines);
+        board = this.findMines(board);
 
         return board;
     }
@@ -28,6 +29,7 @@ export default class GameBoard extends React.Component {
                     isMine: false,
                     isFlagged: false,
                     isRevealed: false,
+                    adjacentMines: 0,
                 };
             }
         }
@@ -41,14 +43,72 @@ export default class GameBoard extends React.Component {
             plantedMines++;
             let firstDigit = this.getRandomNum();
             let secondDigit = this.getRandomNum();
-            
-            // console.log("first digit " + firstDigit);
-            // console.log("second digit " + secondDigit);
             board[firstDigit][secondDigit].isMine = true;
-            // console.log("thing ", board[firstDigit][secondDigit]);
         }
 
         return board;
+    }
+
+    findMines(board){
+        for(let i = 0; i < 10; i++){
+            for(let j=0; j < 10; j++){
+                let nearbyMines = 0;
+                // dont do the calculation for if cell itself is a mine
+                if(!board[i][j].isMine){
+                    // holds an array of nearby cells
+                    let nearbyCells = this.findAjacentCells(board, board[i][j].x, board[i][j].y);
+                    // console.log("current cell: ", board[i][j]);
+                    // console.log("nearby cells: ", nearbyCells);
+                    nearbyCells.map(cell =>{
+                        if(cell.isMine){
+                            nearbyMines++;
+                            console.log("Mine here: ", cell);
+                            this.setState({board: board[i][j].adjacentMines = nearbyMines});
+                        }
+                    });
+                }
+            }
+        }
+        return board;
+    }
+
+    findAjacentCells(board, x, y){
+
+        let cells = [];
+
+        // left
+        if(y > 0){
+            cells.push(board[x][y-1]);
+        }
+        //right
+        if(y < 9){
+            cells.push(board[x][y+1]);
+        }
+        // up
+        if(x > 0){
+            cells.push(board[x-1][y]);
+        }
+        //down     
+        if(x < 9){
+            cells.push(board[x+1][y]);
+        } 
+        // top left
+        if(x > 0 && y > 0){
+            cells.push(board[x-1][y-1]);
+        }
+        // top right
+        if(x > 0 && y < 9){
+            cells.push(board[x-1][y+1]);
+        }
+        // bottom left
+        if(x < 9 && y > 0){
+            cells.push(board[x+1][y-1]);
+        }
+        // bottom right
+        if(x < 9 && y < 9){
+            cells.push(board[x+1][y+1]);
+        }
+        return cells;
     }
 
     getRandomNum(){
@@ -78,21 +138,6 @@ export default class GameBoard extends React.Component {
         });
     }
 
-    click(x, y){
-        if(this.state.board[x][y].isMine){
-            this.setState({board: this.state.board});
-            alert("You lose!");
-            this.showBoard();
-        }
-
-        if(!this.state.board[x][y].isRevealed){
-            this.state.board[x][y].isRevealed = true;
-
-            this.setState({board: this.state.board});
-        }
-
-    }
-
     // reveals all the cells
     showBoard(){
         this.state.board.map( row => {
@@ -101,6 +146,21 @@ export default class GameBoard extends React.Component {
             });
         });
         this.setState({board: this.state.board});
+    }
+
+    click(x, y){
+        if(this.state.board[x][y].isMine){
+            // this.setState({board: this.state.board});
+            this.showBoard();
+            alert("You lose!");
+        }
+
+        if(!this.state.board[x][y].isRevealed){
+            this.state.board[x][y].isRevealed = true;
+
+            this.setState({board: this.state.board});
+        }
+
     }
 
 
