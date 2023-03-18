@@ -42,8 +42,6 @@ export default class Cell extends React.Component {
 
                     default: return open;
                 }
-                // console.log("value: ", value);
-                return open;
             }
         }
 
@@ -54,8 +52,6 @@ export default class Cell extends React.Component {
     }
 
     render(){
-        // const value = this.props;
-        // console.log("props", this.props.value);
         return(
             <div 
             className="cell" 

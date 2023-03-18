@@ -38,7 +38,6 @@ export default class GameBoard extends React.Component {
     }
 
     placeMines(board, mines){
-        // console.log();
         let plantedMines = 0;
         while(plantedMines < mines){
             plantedMines++;
@@ -58,12 +57,9 @@ export default class GameBoard extends React.Component {
                 if(!board[i][j].isMine){
                     // holds an array of nearby cells
                     let nearbyCells = this.findAjacentCells(board, board[i][j].x, board[i][j].y);
-                    // console.log("current cell: ", board[i][j]);
-                    // console.log("nearby cells: ", nearbyCells);
                     nearbyCells.map(cell =>{
                         if(cell.isMine){
                             nearbyMines++;
-                            console.log("Mine here: ", cell);
                             this.setState({board: board[i][j].adjacentMines = nearbyMines});
                         }
                     });
@@ -121,10 +117,8 @@ export default class GameBoard extends React.Component {
     }
 
     renderBoard(board){
-        // document.addEventListener("contextmenu", (event) => {this.handleContextMenu(event)})
         return board.map( row => {
             return row.map(cell => {
-                // console.log("right click from board", this.rightClick(event, cell.x, cell.y));
                 return(
                     <div key = {cell.x * row.length + cell.y}> 
                         <Cell 
@@ -152,7 +146,6 @@ export default class GameBoard extends React.Component {
     showEmptyCells(board, x, y){
         if(board[x][y].adjacentMines == 0){
             let nearbyCells = this.findAjacentCells(board, x, y);
-            // console.log("nearby cells: ", nearbyCells);
             nearbyCells.map(cell => {
                 if(!cell.isFlagged && !cell.isRevealed && !cell.isMine ){
                     board[cell.x][cell.y].isRevealed = true;
@@ -161,7 +154,6 @@ export default class GameBoard extends React.Component {
                 }
             });
         }
-        console.log("number of cells: ", this.state.cells);
     }
 
     click(x, y){
@@ -188,8 +180,6 @@ export default class GameBoard extends React.Component {
 
     handleContextMenu(event, x, y){
         event.preventDefault();
-
-        // console.log("this", this.state.board[x][y]);
 
         if((!this.state.board[x][y].isFlagged) && !this.state.board[x][y].isRevealed){
             this.state.board[x][y].isFlagged = true;
