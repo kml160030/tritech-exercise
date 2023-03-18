@@ -62,7 +62,7 @@ export default class GameBoard extends React.Component {
                     nearbyCells.map(cell =>{
                         if(cell.isMine){
                             nearbyMines++;
-                            console.log("Mine here: ", cell);
+                            // console.log("Mine here: ", cell);
                             this.setState({board: board[i][j].adjacentMines = nearbyMines});
                         }
                     });
@@ -148,15 +148,29 @@ export default class GameBoard extends React.Component {
         this.setState({board: this.state.board});
     }
 
+    showEmptyCells(board, x, y){
+        if(board[x][y].adjacentMines == 0){
+            let nearbyCells = this.findAjacentCells(board, x, y);
+            console.log("nearby cells: ", nearbyCells);
+            nearbyCells.map(cell => {
+                if(!cell.isFlagged && !cell.isRevealed && !cell.isMine ){
+                    board[cell.x][cell.y].isRevealed = true;
+                    this.showEmptyCells(this.state.board,cell.x,cell.y);
+                }
+            });
+        }
+    }
+
     click(x, y){
         if(this.state.board[x][y].isMine){
             // this.setState({board: this.state.board});
             this.showBoard();
             alert("You lose!");
         }
-
         if(!this.state.board[x][y].isRevealed){
             this.state.board[x][y].isRevealed = true;
+
+            this.showEmptyCells(this.state.board, x, y);
 
             this.setState({board: this.state.board});
         }
