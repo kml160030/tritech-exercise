@@ -7,6 +7,7 @@ export default class GameBoard extends React.Component {
     state = {
         mines: 10,
         board: this.initializeBoard(10), // hard coded for 10 mines currently
+        cells: 100,
     };
     
     initializeBoard(mines){
@@ -62,7 +63,7 @@ export default class GameBoard extends React.Component {
                     nearbyCells.map(cell =>{
                         if(cell.isMine){
                             nearbyMines++;
-                            // console.log("Mine here: ", cell);
+                            console.log("Mine here: ", cell);
                             this.setState({board: board[i][j].adjacentMines = nearbyMines});
                         }
                     });
@@ -151,28 +152,35 @@ export default class GameBoard extends React.Component {
     showEmptyCells(board, x, y){
         if(board[x][y].adjacentMines == 0){
             let nearbyCells = this.findAjacentCells(board, x, y);
-            console.log("nearby cells: ", nearbyCells);
+            // console.log("nearby cells: ", nearbyCells);
             nearbyCells.map(cell => {
                 if(!cell.isFlagged && !cell.isRevealed && !cell.isMine ){
                     board[cell.x][cell.y].isRevealed = true;
+                    this.state.cells = this.state.cells-1;
                     this.showEmptyCells(this.state.board,cell.x,cell.y);
                 }
             });
         }
+        console.log("number of cells: ", this.state.cells);
     }
 
     click(x, y){
+        // logic for clicking mine
         if(this.state.board[x][y].isMine){
-            // this.setState({board: this.state.board});
             this.showBoard();
             alert("You lose!");
         }
+        // logic for clicking closed square
         if(!this.state.board[x][y].isRevealed){
             this.state.board[x][y].isRevealed = true;
-
+            this.state.cells = this.state.cells-1;
             this.showEmptyCells(this.state.board, x, y);
+            this.setState({board: this.state.board});            
+        }
 
-            this.setState({board: this.state.board});
+        if(this.state.cells == this.state.mines){
+            this.showBoard();
+            alert("You Win!");
         }
 
     }
