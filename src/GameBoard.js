@@ -79,28 +79,28 @@ export default class GameBoard extends React.Component {
     }
 
     click(x, y){
-        // only allow action if unknown tile
-        // console.log(this.state.board[x][y]);
-        // console.log(event);
-        // if(event.type === 'click'){
         if(this.state.board[x][y].isMine){
-            // this.state.board.isRevealed = true;
             this.setState({board: this.state.board});
+            alert("You lose!");
+            this.showBoard();
         }
 
         if(!this.state.board[x][y].isRevealed){
             this.state.board[x][y].isRevealed = true;
 
-            // console.log("cell", this.state.board[x][y]);
             this.setState({board: this.state.board});
         }
-        // }
-        // else if(event.type === 'contextmenu') {
-        //     event.preventDefault();
-        //     console.log("RIGHT CLICK");
-        // }
 
+    }
 
+    // reveals all the cells
+    showBoard(){
+        this.state.board.map( row => {
+            row.map( cell => {
+                cell.isRevealed = true;
+            });
+        });
+        this.setState({board: this.state.board});
     }
 
 
@@ -115,8 +115,6 @@ export default class GameBoard extends React.Component {
         else if(this.state.board[x][y].isFlagged){
             this.state.board[x][y].isFlagged = false;
         }
-        // console.log("RIGHT CLICK");
-        // alert("right click");
 
         this.setState({board: this.state.board});
     }

@@ -3,6 +3,7 @@ import closed from "./assets/closed.png";
 import open from "./assets/open.png";
 import bomb from "./assets/exploded_bomb.png";
 import flag from "./assets/flagged_bomb.png";
+import openMine from "./assets/revealed_bomb.png";
 import './Cell.css';
 
 export default class Cell extends React.Component {
@@ -16,7 +17,7 @@ export default class Cell extends React.Component {
             return bomb;
         }
         else if(value.isRevealed){
-            return open;
+            return value.isMine ? openMine : open;
         }
 
 
