@@ -8,6 +8,7 @@ export default class GameBoard extends React.Component {
         mines: 10,
         board: this.initializeBoard(10), // hard coded for 10 mines currently
         cells: 100,
+        flagedCells: 0,
     };
     
     initializeBoard(mines){
@@ -175,6 +176,10 @@ export default class GameBoard extends React.Component {
             alert("You Win!");
         }
 
+        if(this.state.cells == this.state.mines){
+
+        }
+
     }
 
 
@@ -183,6 +188,15 @@ export default class GameBoard extends React.Component {
 
         if((!this.state.board[x][y].isFlagged) && !this.state.board[x][y].isRevealed){
             this.state.board[x][y].isFlagged = true;
+
+            // check if cell flagged is a mine
+            if(this.state.board[x][y].isMine){
+                this.state.flagedCells++;
+                if(this.state.flagedCells == this.state.mines){
+                    this.showBoard();
+                    alert("You Win!");
+                }
+            }
         }
         else if(this.state.board[x][y].isFlagged){
             this.state.board[x][y].isFlagged = false;
